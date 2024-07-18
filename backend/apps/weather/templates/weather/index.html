@@ -1,0 +1,34 @@
+{% extends 'weather/base.html' %}
+
+
+{% block content %}
+    <form id="weather-form">
+        <input type="text" id="city" name="city" list="citylist" placeholder="Enter city" required class="form-control" style="width:300px;">
+        <datalist id="citylist">
+            {% for result in showcity %}
+                <option value="{{ result.name }}"></option>
+            {% endfor %}
+        </datalist>
+        <button type="submit" class="btn btn-primary mt-2">Get Weather</button>
+    </form>
+    <div id="weather-result" class="mt-4"></div>
+    <script>
+        document.getElementById('weather-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const city = document.getElementById('city').value;
+            fetch(`/weather/get-weather/?city=${city}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('weather-result').innerText = data.error;
+                    } else {
+                        let result = '<h2>Hourly Weather Data</h2>';
+                        data.forEach(entry => {
+                            result += `<p>Date: ${new Date(entry.date).toLocaleString()}, Temperature: ${entry.temperature_2m} °C</p>`;
+                        });
+                        document.getElementById('weather-result').innerHTML = result;
+                    }
+                });
+        });
+    </script>
+{% endblock %}
