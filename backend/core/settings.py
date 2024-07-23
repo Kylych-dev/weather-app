@@ -23,7 +23,8 @@ THIRD_PARTY_APPS = [
 
 CUSTOM_APPS = [
     'apps.accounts',
-    'apps.weather'
+    'apps.weather',
+    'apps.menu'
 ]
 
 INSTALLED_APPS = [
