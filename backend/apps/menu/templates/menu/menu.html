@@ -1,0 +1,26 @@
+<!-- templates/menu/menu.html -->
+<ul>
+    {% for item in menu %}
+        <li>
+
+            <a href="{% url 'named_url_view' item.named_url %}">{{ item.name }}</a>
+{#            <a href="{% if item.named_url %}{% url item.named_url %}{% else %}{{ item.url }}{% endif %}">#}
+                {{ item.name }}
+            </a>
+            {% if item.children.exists %}
+                <ul>
+                    {% for child in item.children.all %}
+                        <li>
+                            <a href="{% if child.named_url %}{% url child.named_url %}{% else %}{{ child.url }}{% endif %}">
+                                {{ child.name }}
+                            </a>
+                            {% if child.children.exists %}
+                                {% include 'menu/menu.html' with menu=child.children.all %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
